@@ -1,0 +1,82 @@
+@if(dataStatus === dataStatusEnum.Fetching){
+<app-loading></app-loading>
+}
+
+@if(dataStatus === dataStatusEnum.DataAvailable){
+<div class="card card-body border-0 p-0">
+    <div class="mb-3 mt-2">
+        <h4 class="text-muted">
+            {{'TRIAL_SITE_DETAIL_HEADING'|translate}}
+        </h4>
+    </div>
+</div>
+@if (detailForm) {
+<div class="row card card-body m-1">
+    <div class="col-md-12">
+        <form [formGroup]="detailForm" (ngSubmit)="onSubmit()" appFocusFirstInvalidField>
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-name">{{'name'|translate}}</label>
+                        <input id="input-name" class="form-control" type="text" formControlName="name"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(name) }">
+                        @if(name && isInvalid(name)){
+                        <small class="alert alert-danger p-1">
+                            @if(name.errors?.['required']){
+                            {{'name' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-hospitalName">{{'hospitalName'|translate}}</label>
+                        <input id="input-hospitalName" class="form-control" type="text" formControlName="hospitalName"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(hospitalName) }">
+                        @if(hospitalName && isInvalid(hospitalName)){
+                        <small class="alert alert-danger p-1">
+                            @if(hospitalName.errors?.['required']){
+                            {{'hospitalName' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-code">{{'code'|translate}}</label>
+                        <input id="input-code" class="form-control" type="text" formControlName="code"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(code) }" [readonly]="!isNew">
+                        @if(code && isInvalid(code)){
+                        <small class="alert alert-danger p-1">
+                            @if(code.errors?.['required']){
+                            {{'code' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix d-flex justify-content-start mt-2">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!detailForm.dirty || submitted">{{'BUTTON_SUBMIT'|translate}}
+                    @if (submitted){
+                    <span class="spinner-border spinner-border-sm"></span>
+                    }
+                </button>
+                <button type="button" class="btn btn-secondary mx-2" (click)="onCancel()">{{'BUTTON_CANCEL'|translate}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+}
+
+@if(dataStatus === dataStatusEnum.Error){
+<app-error-detail [errorDetail]="apiError"></app-error-detail>
+}

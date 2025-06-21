@@ -1,0 +1,131 @@
+<div class="container p-2">
+    @if(dataStatus === dataStatusEnum.Fetching){
+    <app-loading></app-loading>
+    }
+    @if(dataStatus === dataStatusEnum.DataAvailable){
+    <div class="card card-body border-0 p-0">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="position-relative mb-3">
+                    <h4 class="text-muted">
+                        {{'SIDE_BAR_USERS'|translate}}
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-7 d-flex justify-content-end">
+                <a class="cs-svg px-2" ngbTooltip="{{'TOOLTIP_ADD'|translate}}" (click)="gotoDetail()"><i
+                        csSvgIcon="cs_plus"></i></a>
+                <a class="cs-svg" ngbTooltip="{{'TOOLTIP_REFRESH'|translate}}" (click)="onRefresh()"><i
+                        csSvgIcon="cs_reload"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-sm table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @if(allowMultipleSelect){
+                        <input class="form-check-input" type="checkbox" id="checkbox-selectAll" [(ngModel)]="selectAll"
+                            (click)="onSelectDeselectAll()">
+                        }
+                    </th>
+                    <th>
+                        {{'email'|translate}}
+                    </th>
+                    <th>
+                        {{'fullName'|translate}}
+                    </th>
+                    <th>
+                        {{'COLUMN_ACTION'|translate}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(sourceInfo){
+                @if(sourceInfo.gridDataStatus === dataStatusEnum.Fetching){
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'LOADING'|translate}}</div>
+                    </td>
+                </tr>
+                }
+                @if(sourceInfo.gridDataStatus === dataStatusEnum.DataAvailable){
+                @for(record of sourceInfo.list; track $index)
+                {
+                <tr (click)="changeSelection(record)">
+                    <td>
+
+                        <input class="form-check-input" type="checkbox" id="checkbox-select-{{$index}}"
+                            [(ngModel)]="record.$selected">
+
+                    </td>
+                    <td>
+                        {{record.email}}
+                    </td>
+                    <td>
+                        {{record.fullName}}
+                    </td>
+                    <td>
+                        @if((record.status === enumUserStatus.Created) && !record.$inviteUserLoading){
+
+                        <a class="cs-svg" ngbTooltip="{{'TOOLTIP_INVITE'|translate}}" (click)="onInviteUser(record)">
+                            <i csSvgIcon="cs_envelope"></i>
+                        </a>
+                        }
+                        @if((record?.status === enumUserStatus.Invited) && !record.$inviteUserLoading){
+
+                        <a class="cs-svg" ngbTooltip="{{'TOOLTIP_REINVITE'|translate}}" (click)="onInviteUser(record)">
+                            <i csSvgIcon="cs_resend"></i>
+                        </a>
+                        }
+                        @if(record?.$inviteUserLoading){
+                        <span class="spinner-border spinner-border-sm"></span>
+                        }
+
+                        <a class="cs-svg px-2" ngbTooltip="{{'TOOLTIP_EDIT'|translate}}" (click)="gotoDetail(record)">
+                            <i csSvgIcon="cs_pencil"></i>
+                        </a>
+                        <a class="cs-svg" ngbTooltip="{{'TOOLTIP_DELETE'|translate}}"
+                            (click)="onDeleteClick(record)">
+                            <i csSvgIcon="cs_trash_alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                }
+                @empty {
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'NO_RECORD_FOUND'|translate}}</div>
+                    </td>
+                </tr>
+                }
+                }
+                }
+                @else{
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'NO_RECORD_FOUND'|translate}}</div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot class="border-top">
+                @if(sourceInfo.list.length){
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex flex-row justify-content-end">
+                            <ngb-pagination [collectionSize]="sourceInfo.pagination.totalRecords"
+                                [(page)]="sourceInfo.pagination.pageNo" [pageSize]="sourceInfo.pagination.pageSize"
+                                [maxSize]="5" (pageChange)="pageChanged()" [boundaryLinks]="false">
+                            </ngb-pagination>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tfoot>
+        </table>
+    </div>
+    }
+</div>

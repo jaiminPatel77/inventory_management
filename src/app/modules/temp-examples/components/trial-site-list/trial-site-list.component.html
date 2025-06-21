@@ -1,0 +1,135 @@
+<div class="container p-2">
+    @if(dataStatus === dataStatusEnum.Fetching){
+    <app-loading></app-loading>
+    }
+
+    @if(dataStatus === dataStatusEnum.DataAvailable){
+    <div class="card card-body border-0 p-0">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="position-relative mb-3">
+                    <h4 class="text-muted">
+                        {{'SIDE_BAR_TRIAL_SITES'|translate}}
+                    </h4>
+                </div>
+            </div>
+            <div class="col-md-7 d-flex justify-content-end">
+
+                <div class="position-relative px-2">
+                    <input type="text" autocomplete="off" class="form-control form-control-sm"
+                        [(ngModel)]="nameSearchTxt" (ngModelChange)="onNameSearch()"
+                        placeholder="{{'FIELD_SEARCH' | translate }} {{'name' | translate }}" />
+                </div>
+
+                <a class="cs-svg" ngbTooltip="{{'TOOLTIP_ADD'|translate}}" (click)="gotoDetail()">
+                    <i csSvgIcon="cs_plus"></i>
+                </a>
+                <a class="cs-svg px-2" ngbTooltip="{{'TOOLTIP_CLEAR_FILTER'|translate}}" (click)="onClearFilter()">
+                    <i csSvgIcon="cs_filter_line"></i>
+                </a>
+                <a class="cs-svg px-2" ngbTooltip="{{'TOOLTIP_CLEAR_SORTING'|translate}}" (click)="onClearSorting()">
+                    <i csSvgIcon="cs_sort_amount_up_alt"></i>
+                </a>
+                <a class="cs-svg" ngbTooltip="{{'TOOLTIP_REFRESH'|translate}}" (click)="onRefresh()">
+                    <i csSvgIcon="cs_reload"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-bordered  table-sm table-responsive">
+            <thead class="">
+                <tr>
+                    <th>
+                        @if(allowMultipleSelect){
+                        <input class="form-check-input" type="checkbox" id="checkbox-selectAll" [(ngModel)]="selectAll"
+                            (click)="onSelectDeselectAll()">
+                        }
+                    </th>
+                    <th>
+                        <app-column-sorter [field]="'name'" [orderBy]="sourceInfo.sortingState"
+                            (onSort)="onColumnSort($event)">
+                            {{'name'|translate}}
+                        </app-column-sorter>
+                    </th>
+                    <th>
+                        <app-column-sorter [field]="'code'" [orderBy]="sourceInfo.sortingState"
+                            (onSort)="onColumnSort($event)">
+                            {{'code'|translate}}
+                        </app-column-sorter>
+                    </th>
+                    <th>
+                        {{'COLUMN_ACTION'|translate}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(sourceInfo){
+                @if(sourceInfo.gridDataStatus === dataStatusEnum.Fetching){
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'LOADING'|translate}}</div>
+                    </td>
+                </tr>
+                }
+                @if(sourceInfo.gridDataStatus === dataStatusEnum.DataAvailable){
+                @for(record of sourceInfo.list; track $index)
+                {
+                <tr (click)="changeSelection(record)">
+                    <td>
+                        <input class="form-check-input" type="checkbox" id="checkbox-select-{{$index}}"
+                            [(ngModel)]="record.$selected">
+                    </td>
+                    <td>
+                        {{record.name}}
+                    </td>
+                    <td>
+                        {{record.code}}
+                    </td>
+                    <td>
+                        <a class="cs-svg px-2" ngbTooltip="{{'TOOLTIP_EDIT'|translate}}" (click)="gotoDetail(record)">
+                            <i csSvgIcon="cs_pencil"></i>
+                        </a>
+                        <a class="cs-svg" ngbTooltip="{{'TOOLTIP_DELETE'|translate}}" (click)="onDeleteClick(record)">
+                            <i csSvgIcon="cs_trash_alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                }
+                @empty {
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'NO_RECORD_FOUND'|translate}}</div>
+                    </td>
+                </tr>
+                }
+                }
+                }
+                @else{
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">{{'NO_RECORD_FOUND'|translate}}</div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                @if(sourceInfo.list.length){
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex flex-row justify-content-end">
+                            <ngb-pagination [collectionSize]="sourceInfo.pagination.totalRecords"
+                                [(page)]="sourceInfo.pagination.pageNo" [pageSize]="sourceInfo.pagination.pageSize"
+                                [maxSize]="5" (pageChange)="pageChanged()" [boundaryLinks]="false">
+                            </ngb-pagination>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tfoot>
+        </table>
+    </div>
+    }
+
+</div>

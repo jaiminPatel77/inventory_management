@@ -1,0 +1,14 @@
+<div class="container-fluid vh-100 d-flex flex-column p-0">
+    <app-header></app-header>
+    <div class="row flex-grow-1 m-0">
+        @if(!hideSidebarMenu()){
+        <div class="col-md-3 col-lg-2 bg-light border-right d-flex flex-column overflow-auto">
+            <app-side-bar></app-side-bar>
+        </div>
+        }
+        <div [ngClass]="{'col-md-9 col-lg-10':!hideSidebarMenu(),'col-md-12 col-lg-12':hideSidebarMenu()}">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

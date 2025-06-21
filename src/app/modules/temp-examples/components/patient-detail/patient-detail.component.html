@@ -1,0 +1,143 @@
+@if(dataStatus === dataStatusEnum.Fetching){
+<app-loading></app-loading>
+}
+
+@if(dataStatus === dataStatusEnum.DataAvailable){
+<div class="card card-body border-0 p-0">
+    <div class="mb-3 mt-2">
+        <h4 class="text-muted">
+            {{'PATIENT_DETAIL_HEADING'|translate}}
+        </h4>
+    </div>
+</div>
+@if (detailForm) {
+<div class="row card card-body m-1">
+    <div class="col-md-12">
+        <form [formGroup]="detailForm" (ngSubmit)="onSubmit()" appFocusFirstInvalidField>
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-firstName">{{'firstName'|translate}}</label>
+                        <input id="input-firstName" class="form-control" type="text" formControlName="firstName"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(firstName) }" [readonly]="!isNew">
+                        @if(firstName && isInvalid(firstName)){
+                        <small class="alert alert-danger p-1">
+                            @if(firstName.errors?.['required']){
+                            {{'firstName' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-lastName">{{'lastName'|translate}}</label>
+                        <input id="input-lastName" class="form-control" type="text" formControlName="lastName"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(lastName) }" [readonly]="!isNew">
+                        @if(lastName && isInvalid(lastName)){
+                        <small class="alert alert-danger p-1">
+                            @if(lastName.errors?.['required']){
+                            {{'lastName' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-trialSiteId">{{'trialSiteId'|translate}}</label>
+                    <ng-select [items]="trialSiteSourceInfo.list" [selectOnTab]="true" [multiple]="false"
+                        bindLabel="$displayName" bindValue="id" labelForId="input-trialSiteId"
+                        placeholder="{{'TEXT_SELECT' | translate }}" clearAllText="{{'TEXT_CLEAR' | translate }}"
+                        formControlName="trialSiteId" [ngClass]="{ 'is-invalid' : isInvalid(trialSiteId) }"
+                        [loading]="trialSiteSourceInfo.gridDataStatus === dataStatusEnum.Fetching" [searchable]="true"
+                        (search)="onSearchTrialSite($event)" [readonly]="!isNew">
+                    </ng-select>
+                    @if(trialSiteId && isInvalid(trialSiteId)){
+                    <small class="alert alert-danger p-1">
+                        @if(trialSiteId.errors?.['required']){
+                        {{'trialSiteId' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+
+                @if(!isNew){
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-dailyCigarettesCount">{{'dailyCigarettesCount'|translate}}</label>
+                        <input id="input-dailyCigarettesCount" class="form-control" type="text"
+                            formControlName="dailyCigarettesCount" autocomplete="off"
+                            [ngClass]="{ 'is-invalid' : isInvalid(dailyCigarettesCount) }">
+                        @if(dailyCigarettesCount && isInvalid(dailyCigarettesCount)){
+                        <small class="alert alert-danger p-1">
+                            @if(dailyCigarettesCount.errors?.['required']){
+                            {{'dailyCigarettesCount' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                            @if(dailyCigarettesCount.errors?.['pattern']){
+                            {{'dailyCigarettesCount' | translate}} {{'MUST_BE_NUMBER' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+
+            @if(!isNew){
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <div class="form-group mb-2">
+                        <label for="input-patientId">{{'patientId'|translate}}</label>
+                        <input id="input-patientId" class="form-control" type="text" formControlName="patientId"
+                            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(patientId) }" [readonly]="!isNew">
+                        @if(patientId && isInvalid(patientId)){
+                        <small class="alert alert-danger p-1">
+                            @if(patientId.errors?.['required']){
+                            {{'patientId' | translate}} {{'FIELD_REQUIRED' | translate}}
+                            }
+                        </small>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-enumAllocatedGroup">{{'enumAllocatedGroup'|translate}}</label>
+                    <ng-select [items]="trialSiteSourceInfo.list" [selectOnTab]="true" [multiple]="false"
+                        bindLabel="name" bindValue="id" labelForId="input-enumAllocatedGroup"
+                        placeholder="{{'TEXT_SELECT' | translate }}" clearAllText="{{'TEXT_CLEAR' | translate }}"
+                        formControlName="enumAllocatedGroup"
+                        [ngClass]="{ 'is-invalid' : isInvalid(enumAllocatedGroup) }" [readonly]="!isNew">
+                    </ng-select>
+                    @if(enumAllocatedGroup && isInvalid(enumAllocatedGroup)){
+                    <small class="alert alert-danger p-1">
+                        @if(enumAllocatedGroup.errors?.['required']){
+                        {{'enumAllocatedGroup' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+            </div>
+            }
+
+            <div class="clearfix d-flex justify-content-start mt-2">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!detailForm.dirty || submitted">{{'BUTTON_SUBMIT'|translate}}
+                    @if (submitted){
+                    <span class="spinner-border spinner-border-sm"></span>
+                    }
+                </button>
+                <button type="button" class="btn btn-secondary mx-2" (click)="onCancel()">{{'BUTTON_CANCEL'|translate}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+}
+
+@if(dataStatus === dataStatusEnum.Error){
+<app-error-detail [errorDetail]="apiError"></app-error-detail>
+}

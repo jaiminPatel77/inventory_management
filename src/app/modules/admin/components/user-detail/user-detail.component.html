@@ -1,0 +1,116 @@
+@if(dataStatus === dataStatusEnum.Fetching){
+<app-loading></app-loading>
+}
+
+@if(dataStatus === dataStatusEnum.DataAvailable){
+<div class="card card-body border-0 p-0">
+    <div class="mb-3 mt-2">
+        <h4 class="text-muted">
+            {{'USER_DETAIL_HEADING'|translate}}
+        </h4>
+    </div>
+</div>
+@if (detailForm) {
+<div class="row card card-body m-1">
+    <div class="col-md-12">
+        <form [formGroup]="detailForm" (ngSubmit)="onSubmit()" appFocusFirstInvalidField>
+            <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-email">{{'email'|translate}}</label>
+                    <input id="input-email" class="form-control" type="text" formControlName="email" autocomplete="off"
+                        [ngClass]="{ 'is-invalid' : isInvalid(email) }">
+                    @if(email && isInvalid(email)){
+                    <small class="alert alert-danger p-1">
+                        @if(email.errors?.['required']){
+                        {{'email' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                        @if(email.errors?.['pattern']){
+                        {{'FIELD_EMAIL_ERROR' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-fullName">{{'fullName'|translate}}</label>
+                    <input id="input-fullName" class="form-control" type="text" formControlName="fullName"
+                        autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(fullName) }">
+                    @if(fullName && isInvalid(fullName)){
+                    <small class="alert alert-danger p-1">
+                        @if(fullName.errors?.['required']){
+                        {{'fullName' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+                </div>
+                <div class="row">
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-title">{{'title'|translate}}</label>
+                    <input id="input-title" class="form-control" type="text" formControlName="title" autocomplete="off"
+                        [ngClass]="{ 'is-invalid' : isInvalid(title) }">
+                    @if(title && isInvalid(title)){
+                    <small class="alert alert-danger p-1">
+                        @if(title.errors?.['required']){
+                        {{'title' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+
+                <div class="form-group mb-2 col-md-6">
+                    <label for="input-phoneNumber">{{'phoneNumber'|translate}}</label>
+                    <input id="input-phoneNumber" class="form-control" type="text" formControlName="phoneNumber"
+                        autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(phoneNumber) }">
+                    @if(phoneNumber && isInvalid(phoneNumber)){
+                    <small class="alert alert-danger p-1">
+                        @if(phoneNumber.errors?.['required']){
+                        {{'phoneNumber' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                        @if(phoneNumber.errors?.['pattern']){
+                        {{'PHONE_ERROR' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+
+            </div>
+            <div class="row">
+               
+
+                <div class="form-group mb-2 col-md-12">
+                    <label for="input-roles">{{'roles'|translate}}</label>
+                    <ng-select [items]="roleList" [selectOnTab]="true" [multiple]="true" bindLabel="name"
+                        labelForId="input-roles" placeholder="{{'TEXT_SELECT' | translate }}"
+                        clearAllText="{{'TEXT_CLEAR' | translate }}" formControlName="roles"
+                        [ngClass]="{ 'is-invalid' : isInvalid(roles) }">
+                    </ng-select>
+                    @if(roles && isInvalid(roles)){
+                    <small class="alert alert-danger p-1">
+                        @if(roles.errors?.['required']){
+                        {{'roles' | translate}} {{'FIELD_REQUIRED' | translate}}
+                        }
+                    </small>
+                    }
+                </div>
+            </div>
+            <div class="clearfix d-flex justify-content-start mt-2">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!detailForm.dirty || submitted">{{'BUTTON_SUBMIT'|translate}}
+                    @if (submitted){
+                    <span class="spinner-border spinner-border-sm"></span>
+                    }
+                </button>
+                <button type="button" class="btn btn-secondary mx-2" (click)="onCancel()">{{'BUTTON_CANCEL'|translate}}
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+}
+}
+
+@if(dataStatus === dataStatusEnum.Error){
+<app-error-detail [errorDetail]="apiError"></app-error-detail>
+}

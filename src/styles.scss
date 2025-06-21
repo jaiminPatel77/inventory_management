@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+@import "../node_modules/ngx-toastr/toastr-bs5-alert.scss";
+
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+
+@mixin svg($w,$h){
+    width: $w;   /* Use Default bootstrap variable to set width value(rem)*/
+    height: $h; /* Use Default bootstrap variable to set height value(rem)*/
+    cursor: pointer;
+}
+.cs-svg {
+    i {
+        svg {
+            @include svg(1rem, 1rem);
+
+        }
+    }
+}
+
+.cs-svg-lg {
+    i {
+        svg {
+            @include svg(1.8rem, 1.8rem);
+
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border border-bottom-1">
+    <a class="navbar-brand px-3">  {{'LOGO_TEXT' | translate }}</a>
+    <span (click)="toggleSidebar()">Menu icon</span>
+    <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+            <!-- <li class="nav-item dropdown">
+                <a class="nav-link  cs-svg" [ngbPopover]="popContent"   >
+                    <i class="bi bi-person-circle" csSvgIcon="cs_user_far"></i>
+                </a>
+
+            </li> -->
+
+            <!-- <li class="nav-item cs-svg">
+                <a class="nav-link" (click)="logout()" [ngbTooltip]="'BUTTON_LOGOUT'|translate">
+                    <i class="bi bi-person-circle" csSvgIcon="cs_circle_notch"></i>
+                </a>
+
+            </li> -->
+        </ul>
+    </div>
+</nav>
+
+<ng-template #popContent>
+    <div>
+        <a class="text-nowrap text-decoration-none text-muted" (click)="goToUserProfile()">
+            {{'PROFILE' | translate }}
+        </a>
+        </div>
+        <div>
+            <a class="text-nowrap text-decoration-none text-muted" (click)="goToChangePassword()">
+                {{'CHANGE_PASSWORD' | translate }}
+            </a>
+        </div>
+   
+</ng-template>

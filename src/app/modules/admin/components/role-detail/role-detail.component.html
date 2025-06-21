@@ -1,0 +1,159 @@
+@if(dataStatus === dataStatusEnum.Fetching){
+<app-loading></app-loading>
+}
+
+@if(dataStatus === dataStatusEnum.DataAvailable){
+<div class="card card-body border-0 p-0">
+  <div class="mb-3 mt-2">
+    <h4 class="text-muted">
+      {{'ROLE_DETAIL_HEADING'|translate}}
+    </h4>
+  </div>
+</div>
+@if (detailForm) {
+<div class="row card card-body m-1">
+  <div class="col-md-12">
+    <form [formGroup]="detailForm" (ngSubmit)="onSubmit()" appFocusFirstInvalidField>
+      <div class="row">
+        <div class="form-group mb-2 col-md-6">
+          <div class="form-group mb-2">
+            <label for="input-name">{{'name'|translate}}</label>
+
+            <input id="input-name" class="form-control" type="text" formControlName="name" autocomplete="off"
+              [ngClass]="{ 'is-invalid' : isInvalid(name) }">
+            @if(name && isInvalid(name)){
+            <small class="alert alert-danger p-1">
+              @if(name.errors?.['required']){
+              {{'name' | translate}} {{'FIELD_REQUIRED' | translate}}
+              }
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="form-group mb-2 col-md-6">
+          <label for="input-users">{{'users'|translate}}</label>
+          <ng-select [items]="userList" [selectOnTab]="true" [multiple]="true" bindLabel="fullName"
+            labelForId="input-users" placeholder="{{'TEXT_SELECT' | translate }}"
+            clearAllText="{{'TEXT_CLEAR' | translate }}" formControlName="users"
+            [ngClass]="{ 'is-invalid' : isInvalid(users) }">
+          </ng-select>
+          @if(users && isInvalid(users)){
+          <small class="alert alert-danger p-1">
+            @if(users.errors?.['required']){
+            {{'users' | translate}} {{'FIELD_REQUIRED' | translate}}
+            }
+          </small>
+          }
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="form-group mb-2 col-md-12">
+          <label for="input-description">{{'description'|translate}}</label>
+          <textarea id="input-description" class="form-control" type="text" formControlName="description"
+            autocomplete="off" [ngClass]="{ 'is-invalid' : isInvalid(description) }"></textarea>
+          @if(description && isInvalid(description)){
+          <small class="alert alert-danger p-1">
+            @if(description.errors?.['required']){
+            {{'description' | translate}} {{'FIELD_REQUIRED' | translate}}
+            }
+          </small>
+          }
+        </div>
+      </div>
+
+      @if(rolePermissions.controls.length>0){
+      <div class="row">
+        <div class="mb-2 col-md-12">
+          <label for="role-permission" class="mb-2">{{'rolePermissions' | translate }}</label>
+          <div>
+            <table class="table table-bordered table-sm">
+              <thead class="thead-light">
+                <tr>
+
+                  <th>
+                    {{'COLUMN_TYPE'|translate}}
+                  </th>
+                  <th>
+                    {{'COLUMN_SELECT_ALL'|translate}}
+                  </th>
+                  <th>
+                    {{'COLUMN_VIEW'|translate}}
+                  </th>
+                  <th>
+                    {{'COLUMN_UPDATE'|translate}}
+                  </th>
+                  <th>
+                    {{'COLUMN_CREATE'|translate}}
+                  </th>
+                  <th>
+                    {{'COLUMN_DELETE'|translate}}
+                  </th>
+
+                </tr>
+              </thead>
+              <tbody formArrayName='rolePermissions'>
+                @for(permissionFor of rolePermissions.controls; track $index)
+                {
+                <tr [formGroupName]="$index">
+                  <td>
+                    {{permissionFor?.value?.textId|translate}}
+                  </td>
+                  <td>
+                    <input class="form-check-input" type="checkbox" id="checkbox-allAccess-{{$index}}"
+                      formControlName="allAccess">
+                  </td>
+                  <td>
+                    <input class="form-check-input" type="checkbox" id="checkbox-viewAccess-{{$index}}"
+                      formControlName="viewAccess">
+                  </td>
+                  <td>
+                    <input class="form-check-input" type="checkbox" id="checkbox-updateAccess-{{$index}}"
+                      formControlName="updateAccess">
+                  </td>
+                  <td>
+                    <input class="form-check-input" type="checkbox" id="checkbox-createAccess-{{$index}}"
+                      formControlName="createAccess">
+                  </td>
+                  <td>
+                    <input class="form-check-input" type="checkbox" id="checkbox-deleteAccess-{{$index}}"
+                      formControlName="deleteAccess">
+                  </td>
+
+                </tr>
+                }
+                @empty {
+                <tr>
+                  <td colspan="6">
+                    <div class="d-flex justify-content-center">{{'NO_RECORD_FOUND'|translate}}</div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      }
+
+
+      <div class="clearfix d-flex justify-content-start mt-2">
+        <button type="submit" class="btn btn-primary"
+          [disabled]="!detailForm.dirty || submitted">{{'BUTTON_SUBMIT'|translate}}
+          @if (submitted){
+          <span class="spinner-border spinner-border-sm"></span>
+          }
+        </button>
+        <button type="button" class="btn btn-secondary mx-2" (click)="onCancel()">{{'BUTTON_CANCEL'|translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+}
+
+@if(dataStatus === dataStatusEnum.Error){
+<app-error-detail [errorDetail]="apiError"></app-error-detail>
+}
