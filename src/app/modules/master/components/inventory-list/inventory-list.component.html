@@ -1,1 +1,82 @@
-<p>inventory-list works!</p>
+<div class="toolbar">
+  <input type="text" [(ngModel)]="searchText" (input)="filterMedicines()" placeholder="Search medicine..." />
+  <button (click)="openPopup()">Add Medicine</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sr.</th>
+      <th>Name</th>
+      <th>Pack</th>
+      <th>Batch No.</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Expiry Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let med of filteredMedicines; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ med.name }}</td>
+      <td>{{ med.pack }}</td>
+      <td>{{ med.batchNo }}</td>
+      <td>{{ med.quantity }}</td>
+      <td>{{ med.price }}</td>
+      <td>{{ med.expiryDate }}</td>
+      <td>
+        <button (click)="editMedicine(med)">Edit</button>
+        <button *ngIf="med.id" (click)="deleteMedicine(med.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Popup -->
+<div class="popup" *ngIf="showPopup && medicineForm">
+  <form [formGroup]="medicineForm" (ngSubmit)="addMedicine()">
+    <h3>{{ isEditMode ? 'Edit Medicine' : 'Add New Medicine' }}</h3>
+
+    <label style="position: relative;">
+      Medicine Name:
+      <input formControlName="name" type="text" autocomplete="off" (blur)="hideSuggestionsWithDelay()"
+        (focus)="showSuggestions = filteredNames.length > 0" />
+      <ul *ngIf="showSuggestions && filteredNames.length > 0" class="suggestions">
+        <li *ngFor="let name of filteredNames" (click)="selectName(name)">
+          <span [innerHTML]="highlightMatch(name)"></span>
+        </li>
+
+      </ul>
+    </label>
+
+
+    <label>
+      Pack:
+      <input formControlName="pack" />
+    </label>
+    <label>
+      Batch No.:
+      <input formControlName="batchNo" />
+    </label>
+    <label>
+      Quantity:
+      <input formControlName="quantity" type="number" />
+    </label>
+    <label>
+      Price:
+      <input formControlName="price" type="number" />
+    </label>
+    <label>
+      Expiry Date:
+      <input formControlName="expiryDate" type="date" />
+    </label>
+
+    <div class="popup-buttons">
+      <button type="submit" [disabled]="medicineForm.invalid">
+        {{ isEditMode ? 'Update' : 'Add' }}
+      </button>
+      <button type="button" (click)="closePopup()">Cancel</button>
+    </div>
+  </form>
+</div>

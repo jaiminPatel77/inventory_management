@@ -12,6 +12,7 @@
     "SIDE_BAR_DASHBOARD": "Dashboard",
     "SIDE_BAR_ADMIN": "Admin",
     "SIDE_BAR_LIST" : "Inventory",
+    "SIDE_BAR_BILL" : "Billing",
     "SIDE_BAR_MAIL_SETTING": "Mail Setting",
     "WELCOME_MSG": "Welcome to Angular 17 Angular Template!!",
     "INSTRUCTION_ON_HOW_TO_RESET_YOUR_PASSWORD_AND_SENT_TO_ASSOCIATED_EMAIL": "An email with instructions on how to reset your password has been sent to the email address associated with provided username.",
