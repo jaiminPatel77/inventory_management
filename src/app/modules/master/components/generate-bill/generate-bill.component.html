@@ -13,19 +13,47 @@
   <h5 class="mb-3">Item List</h5>
   <table class="table table-bordered">
     <thead>
-      <tr>
-        <th>No</th>
-        <th>Item Name</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th>Action</th>
-      </tr>
+ <tr>
+  <th style="width: 5%;">No</th>
+  <th style="width: 30%;">Item Name</th>
+  <th style="width: 10%;">Pack</th>
+  <th style="width: 12%;">Batch No.</th>
+  <th style="width: 13%;">Expiry Date</th>
+  <th style="width: 7%;">Qty</th>
+  <th style="width: 8%;">Price</th>
+  <th style="width: 10%;">Total</th>
+  <th style="width: 5%;">Action</th>
+</tr>
+
     </thead>
     <tbody formArrayName="items">
       <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
         <td>{{ item.get('orderNumber')?.value }}</td>
-        <td><input type="text" class="form-control" formControlName="itemName"></td>
+        <td class="position-relative">
+          <input type="text" class="form-control" formControlName="itemName" autocomplete="off"
+            (focus)="onFocusItemName(i)" (input)="onItemNameInput(i)" (blur)="hideSuggestionsWithDelay(i)">
+
+
+          <div *ngIf="showSuggestions?.[i] && filteredNames[i].length > 0" class="dropdown-menu show">
+            <button type="button" class="dropdown-item" *ngFor="let name of filteredNames[i]"
+              (click)="selectName(name, i)">
+              <span [innerHTML]="highlightMatch(name, i)"></span>
+            </button>
+          </div>
+        </td>
+        <!-- <td>
+          <input type="text" class="form-control" formControlName="itemMfg" placeholder="Mfg" autocomplete="off">
+        </td> -->
+        <td>
+          <input type="text" class="form-control mt-1" formControlName="itemPack" placeholder="Pack" autocomplete="off">
+        </td>
+        <td>
+          <input type="text" class="form-control mt-1" formControlName="itemBatch" placeholder="Batch No." autocomplete="off">
+        </td>
+        <td>
+          <input type="date" class="form-control mt-1" formControlName="itemExpDate" placeholder="Expiry Date">
+        </td>
+
         <td><input type="number" class="form-control" formControlName="itemQuantity" (input)="calculateTotal(i)"></td>
         <td><input type="number" class="form-control" formControlName="itemPrice" (input)="calculateTotal(i)"></td>
         <td>
@@ -50,8 +78,11 @@
   </div>
 
   <div class="mt-3 text-center">
-  <button type="button" class="btn btn-success" (click)="submitInvoice()">
-    Print
-  </button>
-</div>
+    <button type="button" class="btn btn-success" (click)="submitInvoice()">
+      Print
+    </button>
+  </div>
 </form>
+
+
+

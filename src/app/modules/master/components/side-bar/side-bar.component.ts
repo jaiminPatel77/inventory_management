@@ -4,14 +4,14 @@ import { MenuItem } from '../../../shared/models/menu';
 import { MenuHelper } from '../../../shared/models/menu-helper';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavigationService } from '../../../shared/services/navigation.service';
 
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, TranslateModule,NgbNavModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, TranslateModule,NgbNavModule,NgbTooltipModule ],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.scss'
 })

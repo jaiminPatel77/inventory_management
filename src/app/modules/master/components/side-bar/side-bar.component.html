@@ -1,32 +1,15 @@
-<ul class="nav nav-pills flex-column mb-auto">
-  @for(menuItem of menuList; ; let i = $index ;track i)
-  {
-  @if(menuItem.children && menuItem.children.length>0){
-  <li class="nav-item" [ngClass]="{ ' dropup' : menuItem.expanded }">
-    <a class="nav-link dropdown-toggle" (click)="onMenuClick(menuItem)"
-    [ngClass]="{ 'active' : menuItem.isLinkActive() }">
-      {{menuItem.title | translate }}
-    </a>
-
-    @for(subMenu of menuItem.children;let j = $index; track j){
-    <ul class="collapse nav nav-pills" [ngClass]="{ ' d-block' : menuItem.expanded }">
-      <li class="nav-item px-3">
-        <a class="nav-link" [routerLink]="subMenu.routerLink"
-        [routerLinkActiveOptions]="{exact: false}" routerLinkActive="active">{{subMenu.title | translate }}</a>
-      </li>
-
-    </ul>
-    }
-  </li>
+<ul class="nav nav-pills flex-column mb-auto text-center">
+  @for (menuItem of menuList; let i = $index; track i) {
+    <li class="nav-item">
+      <a class="nav-link px-2 py-3"
+         [routerLink]="menuItem.routerLink"
+         [routerLinkActiveOptions]="{ exact: false }"
+         routerLinkActive="active"
+         placement="right"
+         ngbTooltip="{{ menuItem.title | translate }}"
+         triggers="mouseenter:mouseleave">
+        <i [class]="menuItem.svgIconName" title="{{ menuItem.title | translate }}"></i>
+      </a>
+    </li>
   }
-  @else {
-  <li class="nav-item">
-    <a class="nav-link" [routerLink]="menuItem.routerLink"
-    [routerLinkActiveOptions]="{exact: false}" routerLinkActive="active">
-      {{menuItem.title | translate }}
-    </a>
-  </li>
-  }
-  }
-
 </ul>

@@ -1,0 +1,12 @@
+.sidebar {
+    width: 60px; /* adjust as needed for your icon size */
+    background-color: #f8f9fa; /* optional */
+}
+.fixed-sidebar {
+    width: 60px; /* or whatever fixed width fits your icons */
+    min-width: 60px;
+    max-width: 60px;
+    flex-shrink: 0; /* prevents shrinking */
+    background-color: #f8f9fa; /* optional */
+    overflow: hidden; /* avoid tooltip/content overflow */
+}

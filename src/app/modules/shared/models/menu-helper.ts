@@ -6,9 +6,9 @@ export class MenuHelper {
      * Define default menu relation for application.
      */
     public static readonly menus: MenuItem[] = [
-        new MenuItem('dashboard', 'SIDE_BAR_DASHBOARD', '/dashboard', 'cs_icon', false, []),
-        new MenuItem('inventory', 'SIDE_BAR_LIST', '/inventory', 'cs_icon', false, []),
-        new MenuItem('billing', 'SIDE_BAR_BILL', '/billing', 'cs_icon', false, []),
+        new MenuItem('dashboard', 'SIDE_BAR_DASHBOARD', '/dashboard', 'fa fa-home', false, []),
+        new MenuItem('inventory', 'SIDE_BAR_LIST', '/inventory', 'fa fa-boxes', false, []),
+        new MenuItem('billing', 'SIDE_BAR_BILL', '/billing', 'fa fa-file-invoice', false, []),
         // new MenuItem('admin', 'SIDE_BAR_ADMIN', '/admin', 'cs_icon', false, [
         //     new MenuItem('roles', 'SIDE_BAR_ROLES', '/admin/roles', 'cs_icon', false, []),
         //     new MenuItem('users', 'SIDE_BAR_USERS', '/admin/users', 'cs_icon', false, []),

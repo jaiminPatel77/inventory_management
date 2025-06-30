@@ -24,58 +24,65 @@
       <td>{{ med.batchNo }}</td>
       <td>{{ med.quantity }}</td>
       <td>{{ med.price }}</td>
-      <td>{{ med.expiryDate }}</td>
+      <td>{{ med.expiryDate ? (med.expiryDate | date: 'dd-MM-yyyy') : '' }}</td>
       <td>
-        <button (click)="editMedicine(med)">Edit</button>
-        <button *ngIf="med.id" (click)="deleteMedicine(med.id)">Delete</button>
+        <button class="edit" (click)="editMedicine(med)">Edit</button>
+        <button class="delete" *ngIf="med.id" (click)="deleteMedicine(med.id)">Delete</button>
       </td>
     </tr>
   </tbody>
 </table>
 
-<!-- Popup -->
 <div class="popup" *ngIf="showPopup && medicineForm">
-  <form [formGroup]="medicineForm" (ngSubmit)="addMedicine()">
-    <h3>{{ isEditMode ? 'Edit Medicine' : 'Add New Medicine' }}</h3>
+  <form [formGroup]="medicineForm" (ngSubmit)="addMedicine()" class="popup-form">
+    <div class="popup-header">
+      <h2>{{ isEditMode ? 'Edit Medicine' : 'Add Medicine' }}</h2>
+      <button type="button" class="close-btn" (click)="closePopup()">×</button>
+    </div>
 
-    <label style="position: relative;">
-      Medicine Name:
-      <input formControlName="name" type="text" autocomplete="off" (blur)="hideSuggestionsWithDelay()"
-        (focus)="showSuggestions = filteredNames.length > 0" />
-      <ul *ngIf="showSuggestions && filteredNames.length > 0" class="suggestions">
-        <li *ngFor="let name of filteredNames" (click)="selectName(name)">
-          <span [innerHTML]="highlightMatch(name)"></span>
-        </li>
+    <div class="popup-grid">
+      <div class="form-group full">
+        <label>Medicine Name</label>
+        <ng-select formControlName="name" [items]="filteredNames" bindLabel="name" bindValue="name" [typeahead]="typeahead$"
+          [loading]="isLoading" [searchable]="true" [clearable]="true" [addTag]="true" placeholder="Search medicine..."
+          (change)="onMedicineSelected($event)">
+        </ng-select>
 
-      </ul>
-    </label>
+      </div>
 
+      <div class="form-group full">
+        <label>Company</label>
+        <input formControlName="manufacturer" />
+      </div>
 
-    <label>
-      Pack:
-      <input formControlName="pack" />
-    </label>
-    <label>
-      Batch No.:
-      <input formControlName="batchNo" />
-    </label>
-    <label>
-      Quantity:
-      <input formControlName="quantity" type="number" />
-    </label>
-    <label>
-      Price:
-      <input formControlName="price" type="number" />
-    </label>
-    <label>
-      Expiry Date:
-      <input formControlName="expiryDate" type="date" />
-    </label>
+      <div class="form-group">
+        <label>Pack</label>
+        <input formControlName="pack" />
+      </div>
 
-    <div class="popup-buttons">
-      <button type="submit" [disabled]="medicineForm.invalid">
-        {{ isEditMode ? 'Update' : 'Add' }}
-      </button>
+      <div class="form-group">
+        <label>Batch No.</label>
+        <input formControlName="batchNo" />
+      </div>
+
+      <div class="form-group">
+        <label>Quantity</label>
+        <input formControlName="quantity" type="number" />
+      </div>
+
+      <div class="form-group">
+        <label>Price</label>
+        <input formControlName="price" type="number" />
+      </div>
+
+      <div class="form-group full">
+        <label>Expiry Date</label>
+        <input formControlName="expiryDate" type="date" />
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <button type="submit" [disabled]="medicineForm.invalid">{{ isEditMode ? 'Update' : 'Add' }}</button>
       <button type="button" (click)="closePopup()">Cancel</button>
     </div>
   </form>
