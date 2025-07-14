@@ -9,6 +9,7 @@ export class MenuHelper {
         new MenuItem('dashboard', 'SIDE_BAR_DASHBOARD', '/dashboard', 'fa fa-home', false, []),
         new MenuItem('inventory', 'SIDE_BAR_LIST', '/inventory', 'fa fa-boxes', false, []),
         new MenuItem('billing', 'SIDE_BAR_BILL', '/billing', 'fa fa-file-invoice', false, []),
+        new MenuItem('history', 'SIDE_BAR_HISTORY', '/history', 'fa fa-book-medical', false, []),
         // new MenuItem('admin', 'SIDE_BAR_ADMIN', '/admin', 'cs_icon', false, [
         //     new MenuItem('roles', 'SIDE_BAR_ROLES', '/admin/roles', 'cs_icon', false, []),
         //     new MenuItem('users', 'SIDE_BAR_USERS', '/admin/users', 'cs_icon', false, []),

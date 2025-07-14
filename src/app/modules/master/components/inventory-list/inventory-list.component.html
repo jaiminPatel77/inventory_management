@@ -43,9 +43,9 @@
     <div class="popup-grid">
       <div class="form-group full">
         <label>Medicine Name</label>
-        <ng-select formControlName="name" [items]="filteredNames" bindLabel="name" bindValue="name" [typeahead]="typeahead$"
-          [loading]="isLoading" [searchable]="true" [clearable]="true" [addTag]="true" placeholder="Search medicine..."
-          (change)="onMedicineSelected($event)">
+        <ng-select formControlName="name" [items]="filteredNames" bindLabel="name" bindValue="name"
+          [typeahead]="typeahead$" [loading]="isLoading" [searchable]="true" [clearable]="true" [addTag]="true"
+          placeholder="Search medicine..." (change)="onMedicineSelected($event)">
         </ng-select>
 
       </div>
@@ -77,8 +77,19 @@
 
       <div class="form-group full">
         <label>Expiry Date</label>
-        <input formControlName="expiryDate" type="date" />
+        <div class="input-group">
+          <input class="form-control" placeholder="dd-mm-yyyy" name="expiryDateDisplay" [value]="displayExpiryDate"
+            readonly ngbDatepicker #d="ngbDatepicker" (dateSelect)="onExpiryDateSelected($event)"
+            (click)="d.toggle()" />
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
+              <i class="fa fa-solid fa-calendar-days"></i>
+            </button>
+          </div>
+        </div>
       </div>
+
+
     </div>
 
     <div class="popup-footer">

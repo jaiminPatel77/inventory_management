@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { InventoryService } from '../../../shared/services/inventory.service';
-import { Medicine } from '../../../shared/models/medicine_model-dto';
+import { MedicalBillHistory, Medicine } from '../../../shared/models/medicine_model-dto';
 import { BillItemDto, generateBillHtmlHelper } from '../../../shared/models/generate-bill-html-helper';
 import { CommonService } from '../../../shared/services/common.service';
-
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-generate-bill',
   standalone: true,
@@ -98,7 +98,7 @@ export class GenerateBillComponent {
       itemTotal: [{ value: 0, disabled: true }],
       itemMfg: [''],
       itemPack: [''],
-      itemBatch: [''],  
+      itemBatch: [''],
       itemExpDate: ['']
     });
   }
@@ -145,17 +145,57 @@ export class GenerateBillComponent {
     if (this.invoiceForm.invalid) {
       this.invoiceForm.markAllAsTouched();
       this._commonService.toastrService.error('Some of the fields are missing, please check and fill all the fields.', 'Error');
-
       return;
     }
 
-    const formData = {
-      ...this.invoiceForm.value,
-      totalAmount: this.getTotalAmount()
-    };
-    this.generateBillHtml();
+    const itemsToUpdate = this.invoiceForm.value.items.map((item: any) => {
+      const med = this.medicines.find(m => m.name === item.itemName);
+      return med ? { id: med.id, purchasedQuantity: item.itemQuantity } : null;
+    }).filter(Boolean);
+
+    this.medicineService.updateInventoryQuantities(itemsToUpdate).subscribe({
+      next: (message: string) => {
+        this._commonService.toastrService.success(message || 'Inventory updated', 'Success');
+        this.generateBillHtml();
+        this.saveBilledDetails();
+      },
+      error: (err) => {
+        console.error('Inventory update failed:', err);
+        this._commonService.toastrService.error('Failed to update inventory.', 'Error');
+      }
+    });
   }
 
+saveBilledDetails() {
+  const itemsList: BillItemDto[] = this.invoiceForm.get('items')?.value || [];
+  const medicineList: Medicine[] = [];
+
+  itemsList.forEach(item => {
+    medicineList.push({
+      name: item.itemName,
+      pack: parseInt(item.itemPack || '0'),
+      batchNo: item.itemBatch || '',
+      quantity: item.itemQuantity,
+      price: item.itemPrice,
+      expiryDate: item.itemExpDate || ''
+    });
+  });
+
+  const billDetails: MedicalBillHistory = {
+    id: uuidv4(), // ← generate unique id
+    patientName: this.invoiceForm.get('patientName')?.value || '',
+    doctorName: this.invoiceForm.get('doctorName')?.value || '',
+    billDate: new Date().toLocaleDateString('en-GB'),
+    items: medicineList,
+    totalAmount: this.getTotalAmount(),
+    htmlContent: this.htmlContent
+  };
+
+  this.medicineService.saveBill(billDetails).subscribe({
+    next: () => this._commonService.toastrService.success('Bill saved successfully', 'Success'),
+    error: err => this._commonService.toastrService.error('Failed to save bill.', 'Error')
+  });
+}
 
 
   // generate Bill Html
@@ -172,7 +212,7 @@ export class GenerateBillComponent {
 
 
     this.htmlContent = generateBillHtmlHelper.staticBoilerPlat(patientName.replace(' ', '_')) +
-      generateBillHtmlHelper.generateBody(patientName, doctorName, billNo, billDate, itemsList,netAmount) +
+      generateBillHtmlHelper.generateBody(patientName, doctorName, billNo, billDate, itemsList, netAmount) +
       generateBillHtmlHelper.staticFooter();
 
     // Print the generated HTML content

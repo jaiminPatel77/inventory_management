@@ -1,0 +1,28 @@
+<h2 class="section-title">Medical Bill History</h2>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Total Amount</th>
+        <th>Actions</th> <!-- New -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bill of bills">
+        <td>{{ bill.patientName }}</td>
+        <td>{{ bill.doctorName }}</td>
+        <td>{{ bill.billDate }}</td>
+        <td class="amount-cell">{{ bill.totalAmount | currency:'INR':'symbol':'1.2-2' }}</td>
+        <td>
+          <button [ngbTooltip]="'open'" class="icon-button" (click)="openBill(bill)">
+            <i class="fa fa-light fa-file-export"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

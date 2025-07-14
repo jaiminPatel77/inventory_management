@@ -6,6 +6,7 @@ import { HomeComponent } from './modules/master/components/home/home.component';
 import { ProfileComponent } from './modules/master/components/profile/profile.component';
 import { InventoryListComponent } from './modules/master/components/inventory-list/inventory-list.component';
 import { GenerateBillComponent } from './modules/master/components/generate-bill/generate-bill.component';
+import { BillHistoryComponent } from './modules/master/components/bill-history/bill-history.component';
 
 export const routes: Routes = [
     // {
@@ -53,6 +54,12 @@ export const routes: Routes = [
                  data: { preload: true },
                 // canActivate: [authGuard],
                 component: GenerateBillComponent
+            },
+            {
+                path: 'history',
+                 data: { preload: true },
+                // canActivate: [authGuard],
+                component: BillHistoryComponent
             }
         ]
     }

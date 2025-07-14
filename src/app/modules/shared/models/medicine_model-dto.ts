@@ -14,3 +14,14 @@ export interface MedicineReference {
   companyName: string;
   stripCount: string;
 }
+
+export class  MedicalBillHistory {
+  id?: string;
+  patientName?: string;
+  doctorName?: string;
+  billDate?: string;
+  items: Medicine[] = [];
+  totalAmount?: number;
+  htmlContent?: string;
+}
+

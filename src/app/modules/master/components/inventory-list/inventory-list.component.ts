@@ -5,16 +5,19 @@ import { Medicine, MedicineReference } from '../../../shared/models/medicine_mod
 import { InventoryService } from '../../../shared/services/inventory.service';
 import { debounceTime, switchMap, of, Subject, catchError, distinctUntilChanged, tap } from 'rxjs';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
   selector: 'app-inventory-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NgbDatepickerModule],
   templateUrl: './inventory-list.component.html',
   styleUrl: './inventory-list.component.scss'
 })
 export class InventoryListComponent implements OnInit {
+  displayExpiryDate = '';
+
   medicines: Medicine[] = [];
   filteredMedicines: Medicine[] = [];
   searchText = '';
@@ -144,6 +147,32 @@ export class InventoryListComponent implements OnInit {
       });
     }
   }
+
+
+  getNgbDate(dateStr: string): NgbDateStruct | null {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate()
+    };
+  }
+
+  formatDate(struct: NgbDateStruct): string {
+    if (!struct) return '';
+    const { year, month, day } = struct;
+    const paddedMonth = month.toString().padStart(2, '0');
+    const paddedDay = day.toString().padStart(2, '0');
+    return `${year}-${paddedMonth}-${paddedDay}`; // ISO format
+  }
+  onExpiryDateSelected(date: NgbDateStruct) {
+    if (!date) return;
+    const isoDate = this.formatDate(date);
+    this.medicineForm?.get('expiryDate')?.setValue(isoDate);
+    this.displayExpiryDate = `${date.day.toString().padStart(2, '0')}-${date.month.toString().padStart(2, '0')}-${date.year}`;
+  }
+
 
   highlightMatch(name: string): string {
     const input = this.medicineForm?.get('name')?.value || '';

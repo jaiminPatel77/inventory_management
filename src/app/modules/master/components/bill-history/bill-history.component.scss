@@ -1,0 +1,56 @@
+.icon-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  color: #1976d2;
+  transition: color 0.2s ease;
+}
+
+.icon-button:hover {
+  color: #0d47a1;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.table-container {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.custom-table thead {
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+.custom-table th, 
+.custom-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.amount-cell {
+  font-weight: bold;
+  color: #2e7d32;
+  text-align: right;
+}
