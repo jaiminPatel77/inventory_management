@@ -14,7 +14,7 @@ export class Environment {
 
         const setting = {
             rootURL: '/',
-            apiServiceUrl: 'http://localhost:58062',
+            apiServiceUrl: 'http://localhost:8080/api',
             captchaKey: '6LeMWhMaAAAAAIdY1BDd2CRx9Q_m0LYZ8_-qCeGV',
         }
         return setting;

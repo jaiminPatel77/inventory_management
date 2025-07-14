@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MedicalBillHistory, Medicine, MedicineReference } from '../models/medicine_model-dto';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.Setting.apiServiceUrl;
 
   constructor(private http: HttpClient) { }
 

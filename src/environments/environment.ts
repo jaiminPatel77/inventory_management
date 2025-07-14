@@ -14,7 +14,7 @@ export class CSEnvironment {
 
         const setting = {
             rootURL: '/',
-            apiServiceUrl: 'http://localhost:51390',
+            apiServiceUrl: 'http://localhost:8080/api',
             captchaKey: '6LeMWhMaAAAAAIdY1BDd2CRx9Q_m0LYZ8_-qCeGV',
         }
         return setting;
