@@ -14,7 +14,8 @@ export class Environment {
 
         const setting = {
             rootURL: '/',
-            apiServiceUrl: 'http://localhost:8080/api',
+            // apiServiceUrl: 'http://localhost:8080/api',
+            apiServiceUrl: 'https://inventory-management-api-xms0.onrender.com/api',
             captchaKey: '6LeMWhMaAAAAAIdY1BDd2CRx9Q_m0LYZ8_-qCeGV',
         }
         return setting;
